@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package auth.v1;
+package gophkeeper.auth.v1;
 
 import "google/protobuf/timestamp.proto";
 
@@ -23,12 +23,12 @@ message RegisterRequest {
 
 message LoginResponse {
   string accessToken = 1;
-  google.protobuf.Timestamp expiredAt = 3;
+  google.protobuf.Timestamp expiredAt = 2;
 }
 
 message RegisterResponse {
   string id = 1;
   string username = 2;
-  string accessToken = 4;
-  google.protobuf.Timestamp expiredAt = 5;
+  string accessToken = 3;
+  google.protobuf.Timestamp expiredAt = 4;
 }
