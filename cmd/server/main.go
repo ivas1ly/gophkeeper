@@ -12,7 +12,11 @@ func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	cfg := config.New()
+	cfg, err := config.Load()
+	if err != nil {
+		log.Printf("unable to load config: %s", err.Error())
+		return
+	}
 
 	s, err := server.New(ctx, cfg)
 	if err != nil {

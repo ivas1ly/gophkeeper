@@ -23,7 +23,7 @@ type Server struct {
 }
 
 func New(_ context.Context, cfg config.Config) (*Server, error) {
-	log := logger.New(cfg.Server.LogLevel, logger.NewDefaultLoggerConfig()).
+	log := logger.New(cfg.App.LogLevel, logger.NewDefaultLoggerConfig()).
 		With(zap.String("server", "gophkeeper"))
 	logger.SetGlobalLogger(log)
 

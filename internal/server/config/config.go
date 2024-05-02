@@ -2,39 +2,56 @@ package config
 
 import (
 	"fmt"
-	"net"
+	"strings"
+
+	"github.com/spf13/viper"
 )
 
 const (
-	defaultHost     = "localhost"
-	defaultPort     = "8080"
+	defaultAddress  = "localhost:8080"
 	defaultLogLevel = "info"
 )
 
 type Config struct {
+	App
 	Server
-	HTTP
+}
+
+type App struct {
+	LogLevel string `mapstructure:"LOG_LEVEL"`
 }
 
 type Server struct {
-	LogLevel string
+	RunAddress string `mapstructure:"SERVER_ADDRESS"`
 }
 
-type HTTP struct {
-	RunAddress string
-}
+func Load() (Config, error) {
+	viper.SetEnvPrefix("GK")
+	viper.SetConfigName("server")
+	viper.SetConfigType("yaml")
+	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
+	viper.AddConfigPath("./config")
 
-func New() Config {
+	viper.AutomaticEnv()
+
+	err := viper.ReadInConfig()
+	if err != nil {
+		return Config{}, fmt.Errorf("fatal error read config file: %w", err)
+	}
+
+	viper.SetDefault("server.address", defaultAddress)
+	viper.SetDefault("log_level", defaultLogLevel)
+
 	cfg := Config{
-		Server: Server{
-			LogLevel: defaultLogLevel,
+		App: App{
+			LogLevel: viper.GetString("log_level"),
 		},
-		HTTP: HTTP{
-			RunAddress: net.JoinHostPort(defaultHost, defaultPort),
+		Server: Server{
+			RunAddress: viper.GetString("server.address"),
 		},
 	}
 
 	fmt.Printf("\nstart application with config:\n%+v\n\n", cfg)
 
-	return cfg
+	return cfg, nil
 }
