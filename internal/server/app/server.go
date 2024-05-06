@@ -6,9 +6,9 @@ import (
 	"net"
 
 	"github.com/ivas1ly/gophkeeper/internal/lib/logger"
-	authV1 "github.com/ivas1ly/gophkeeper/internal/server/api/controller/grpc/v1/auth"
+	authV1 "github.com/ivas1ly/gophkeeper/internal/server/api/controller/grpc/auth/v1"
 	"github.com/ivas1ly/gophkeeper/internal/server/config"
-	authDesc "github.com/ivas1ly/gophkeeper/pkg/api/v1/auth"
+	authV1Desc "github.com/ivas1ly/gophkeeper/pkg/api/gophkeeper/auth/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/reflection"
@@ -56,9 +56,9 @@ func (s *Server) initGRPCServer(_ context.Context) {
 	s.grpcServer = grpc.NewServer(grpc.Creds(insecure.NewCredentials()))
 	reflection.Register(s.grpcServer)
 
-	authHandler := authV1.NewAuthHandler(s.log)
+	authV1Handler := authV1.NewAuthHandler(s.log)
 
-	authDesc.RegisterAuthServiceServer(s.grpcServer, authHandler)
+	authV1Desc.RegisterAuthServiceServer(s.grpcServer, authV1Handler)
 }
 
 func (s *Server) runGRPCServer() error {

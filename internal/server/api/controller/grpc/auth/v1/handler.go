@@ -1,16 +1,16 @@
 package v1
 
 import (
-	pb "github.com/ivas1ly/gophkeeper/pkg/api/v1/auth"
+	authpb "github.com/ivas1ly/gophkeeper/pkg/api/gophkeeper/auth/v1"
 	"go.uber.org/zap"
 )
 
 type AuthHandler struct {
-	pb.UnimplementedAuthServiceServer
+	authpb.UnimplementedAuthServiceServer
 	log *zap.Logger
 }
 
-var _ pb.AuthServiceServer = (*AuthHandler)(nil)
+var _ authpb.AuthServiceServer = (*AuthHandler)(nil)
 
 func NewAuthHandler(log *zap.Logger) *AuthHandler {
 	return &AuthHandler{

@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package gophkeeper.auth.v1;
+
+import "google/protobuf/timestamp.proto";
+import "buf/validate/validate.proto";
+
+option go_package = "github.com/ivas1ly/gophkeeper/pkg/api/gophkeeper/auth/v1;authv1";
+
+service AuthService {
+  rpc Login(LoginRequest) returns (LoginResponse);
+  rpc Register(RegisterRequest) returns (RegisterResponse);
+}
+
+message LoginRequest {
+  string username = 1 [(buf.validate.field).string = {
+    min_len: 3;
+    max_len: 255;
+  }];
+  string password = 2[(buf.validate.field).string = {
+    min_len: 16;
+    max_len: 512;
+  }];
+}
+
+message RegisterRequest {
+  string username = 1[(buf.validate.field).string = {
+    min_len: 3;
+    max_len: 255;
+  }];
+  string password = 2[(buf.validate.field).string = {
+    min_len: 16;
+    max_len: 512;
+  }];
+}
+
+message LoginResponse {
+  string access_token = 1;
+  google.protobuf.Timestamp expired_at = 2;
+}
+
+message RegisterResponse {
+  string id = 1;
+  string username = 2;
+  string access_token = 3;
+  google.protobuf.Timestamp expired_at = 4;
+}
