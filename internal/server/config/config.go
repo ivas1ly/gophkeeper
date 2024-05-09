@@ -3,18 +3,22 @@ package config
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/spf13/viper"
 )
 
 const (
-	defaultAddress  = "localhost:8080"
-	defaultLogLevel = "info"
+	defaultAddress              = "localhost:8080"
+	defaultLogLevel             = "info"
+	defaultDatabaseConnTimeout  = 5 * time.Second
+	defaultDatabaseConnAttempts = 3
 )
 
 type Config struct {
 	App
 	Server
+	DB
 }
 
 type App struct {
@@ -23,6 +27,12 @@ type App struct {
 
 type Server struct {
 	RunAddress string `mapstructure:"SERVER_ADDRESS"`
+}
+
+type DB struct {
+	DatabaseURI          string        `mapstructure:"DB_ADDRESS"`
+	DatabaseConnTimeout  time.Duration `mapstructure:"DB_CONN_TIMEOUT"`
+	DatabaseConnAttempts int           `mapstructure:"DB_CONN_ATTEMPTS"`
 }
 
 func Load() (Config, error) {
@@ -41,6 +51,9 @@ func Load() (Config, error) {
 
 	viper.SetDefault("server.address", defaultAddress)
 	viper.SetDefault("log_level", defaultLogLevel)
+	viper.SetDefault("db.address", "")
+	viper.SetDefault("db.conn.timeout", defaultDatabaseConnTimeout)
+	viper.SetDefault("db.conn.attempts", defaultDatabaseConnAttempts)
 
 	cfg := Config{
 		App: App{
@@ -48,6 +61,11 @@ func Load() (Config, error) {
 		},
 		Server: Server{
 			RunAddress: viper.GetString("server.address"),
+		},
+		DB: DB{
+			DatabaseURI:          viper.GetString("db.address"),
+			DatabaseConnTimeout:  viper.GetDuration("db.conn.timeout"),
+			DatabaseConnAttempts: viper.GetInt("db.conn.attempts"),
 		},
 	}
 

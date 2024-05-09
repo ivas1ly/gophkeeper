@@ -1,3 +1,10 @@
 log_level: info
+
 server:
   address: localhost:8080
+
+db:
+  address: postgres://postgres:postgres@localhost:5432/gophkeeper?sslmode=disable
+  conn:
+    timeout: 5s
+    attempts: 3
