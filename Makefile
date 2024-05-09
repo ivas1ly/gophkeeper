@@ -14,7 +14,7 @@ build: ## Prepare binaries
 	go build -C ./cmd/server/ -o server
 
 .PHONY: run-client
-run-server: ## Run client
+run-client: ## Run client
 	go run ./cmd/client/main.go
 
 .PHONY: run-server
