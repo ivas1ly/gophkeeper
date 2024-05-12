@@ -45,7 +45,7 @@ func NewDefaultLoggerConfig() zap.Config {
 		Encoding:          "json",
 		EncoderConfig:     encoderCfg,
 		OutputPaths:       []string{"stdout"},
-		ErrorOutputPaths:  []string{"stdout"},
+		ErrorOutputPaths:  []string{"stderr"},
 		InitialFields:     nil,
 	}
 
