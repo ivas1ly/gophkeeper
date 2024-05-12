@@ -38,7 +38,7 @@ func New(_ context.Context, cfg config.Config) (*Server, error) {
 func (s *Server) Run(ctx context.Context) error {
 	defer func() {
 		err := s.log.Sync()
-		if err != nil {
+		if err != nil && !errors.Is(err, syscall.ENOTTY) {
 			log.Println(err)
 		}
 	}()
