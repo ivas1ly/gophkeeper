@@ -8,6 +8,18 @@ help: ## Display help screen
 lint: ## Run linter
 	golangci-lint run -v ./...
 
+.PHONY: migrate-up
+migrate-up:
+	goose -dir ./migrations up
+
+.PHONY: migrate-down
+migrate-down:
+	goose -dir ./migrations down
+
+.PHONY: migrate-status
+migrate-status:
+	goose -dir ./migrations status
+
 .PHONY:build
 build: ## Prepare binaries
 	go build -C ./cmd/client/ -o client
