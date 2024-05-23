@@ -11,6 +11,7 @@ import (
 	"github.com/ivas1ly/gophkeeper/internal/lib/logger"
 	"github.com/ivas1ly/gophkeeper/internal/lib/storage/postgres"
 	authV1 "github.com/ivas1ly/gophkeeper/internal/server/api/controller/grpc/auth/v1"
+	reqlogger "github.com/ivas1ly/gophkeeper/internal/server/api/interceptor"
 	"github.com/ivas1ly/gophkeeper/internal/server/app/provider"
 	"github.com/ivas1ly/gophkeeper/internal/server/config"
 	authV1Desc "github.com/ivas1ly/gophkeeper/pkg/api/gophkeeper/auth/v1"
@@ -87,7 +88,11 @@ func (s *Server) Run(ctx context.Context) error {
 }
 
 func (s *Server) initGRPCServer(_ context.Context) {
-	s.grpcServer = grpc.NewServer(grpc.Creds(insecure.NewCredentials()))
+	s.grpcServer = grpc.NewServer(
+		grpc.Creds(insecure.NewCredentials()),
+		grpc.ChainUnaryInterceptor(reqlogger.NewInterceptor(s.log)),
+	)
+
 	reflection.Register(s.grpcServer)
 
 	authV1Handler := authV1.NewAuthHandler(s.serviceProvider.AuthService, s.validator)
