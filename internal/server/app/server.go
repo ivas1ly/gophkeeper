@@ -8,6 +8,7 @@ import (
 	"syscall"
 
 	"github.com/bufbuild/protovalidate-go"
+	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/recovery"
 	"github.com/ivas1ly/gophkeeper/internal/lib/logger"
 	"github.com/ivas1ly/gophkeeper/internal/lib/storage/postgres"
 	authV1 "github.com/ivas1ly/gophkeeper/internal/server/api/controller/grpc/auth/v1"
@@ -92,6 +93,7 @@ func (s *Server) initGRPCServer(_ context.Context) {
 		grpc.Creds(insecure.NewCredentials()),
 		grpc.ChainUnaryInterceptor(
 			reqlogger.NewInterceptor(s.log),
+			recovery.UnaryServerInterceptor(),
 		),
 	)
 
