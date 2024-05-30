@@ -1,0 +1,15 @@
+app:
+  log_level: info
+  name: GophKeeper
+  jwt:
+    signing_key: 30ab73e47d6aa53116b90aa23bc3b9ae68822d10f7288ba10f2d901879539bde
+    expiration_time: 43200s
+
+server:
+  address: localhost:8080
+
+db:
+  address: postgres://postgres:postgres@localhost:5432/gophkeeper?sslmode=disable
+  conn:
+    timeout: 5s
+    attempts: 3
